@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/mamangzed/tablein/compare/v1.1.0...v1.1.1) (2025-05-23)
+
+
+### Bug Fixes
+
+* change name of class ([c070210](https://github.com/mamangzed/tablein/commit/c070210c37ec33f06f5fb762ceb37d5d9ec37f69))
+* change name of classs ([ad174f1](https://github.com/mamangzed/tablein/commit/ad174f16d3c081f9ce5377f0e662d79bf184574d))
+
 # [1.1.0](https://github.com/mamangzed/tablein/compare/v1.0.0...v1.1.0) (2025-05-23)
 
 
