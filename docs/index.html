@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabelin - Advanced Table Library Demo</title>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/html2pdf.js/dist/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        
+        h1, h2 {
+            color: #333;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .options-panel {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        
+        .options-panel label {
+            margin-right: 15px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .options-panel input, .options-panel select {
+            margin-left: 5px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .code-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .highlight {
+            padding: 2px 5px;
+            background-color: #ffffcc;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .feature-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: #e0f7fa;
+            color: #00838f;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        
+        .new-tag {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .nav-tabs li {
+            margin-right: 2px;
+        }
+        
+        .nav-tabs button {
+            padding: 10px 15px;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            margin-right: 0;
+        }
+        
+        .nav-tabs button.active {
+            background-color: #fff;
+            border-bottom: 2px solid white;
+            margin-bottom: -1px;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .custom-theme-table {
+            --header-bg: #3f51b5;
+            --header-text: white;
+            --row-hover: #f0f4ff;
+            --border-color: #c5cae9;
+            --accent-color: #3f51b5;
+        }
+        
+        .context-menu-danger {
+            color: #f44336;
+        }
+        
+        .context-menu-primary {
+            color: #2196F3;
+        }
+        
+        .context-menu-success {
+            color: #4CAF50;
+        }
+        
+        .mock-api-controls {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px dashed #ccc;
+        }
+        
+        .mock-api-controls .response-time {
+            width: 60px;
+        }
+        
+        .server-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background-color: #e0e0e0;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        pre {
+            margin: 0;
+        }
+        
+        .keyboard-shortcuts {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .keyboard-shortcuts ul {
+            margin-bottom: 0;
+        }
+        
+        .feature-highlight {
+            display: block;
+            background-color: #e8eaf6;
+            border-left: 4px solid #3f51b5;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .feature-demo {
+            position: relative;
+        }
+        
+        .feature-demo::before {
+            content: "New Feature";
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background-color: #4caf50;
+            color: white;
+            padding: 2px 10px;
+            font-size: 12px;
+            border-radius: 10px;
+            z-index: 1;
+        }
+        
+        .visualization-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .chart-placeholder {
+            height: 200px;
+            background-color: #e3f2fd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1565c0;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px dashed #1565c0;
+        }
+        
+        .validation-message {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+        
+        .conditional-cell {
+            position: relative;
+        }
+        
+        .conditional-cell::after {
+            content: "✓";
+            position: absolute;
+            right: 5px;
+            color: #4caf50;
+        }
+        
+        .insights-panel {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .insights-header {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .insights-content {
+            color: #1b5e20;
+            font-style: italic;
+        }
+        
+        .distribution-chart {
+            height: 150px;
+            background: linear-gradient(90deg, 
+                rgba(63,81,181,0.1) 0%, 
+                rgba(63,81,181,0.4) 20%, 
+                rgba(63,81,181,0.8) 50%, 
+                rgba(63,81,181,0.4) 80%, 
+                rgba(63,81,181,0.1) 100%);
+            border-radius: 5px;
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        .distribution-chart::before {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: #f44336;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .distribution-axis {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            color: #555;
+            font-size: 12px;
+        }
+        
+        .editable-cell {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .editable-cell:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .editable-cell::after {
+            content: "✎";
+            position: absolute;
+            right: 5px;
+            opacity: 0.5;
+        }
+        
+        .editable-cell:hover::after {
+            opacity: 1;
+        }
+        
+        .version-history {
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .version-item {
+            padding: 5px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .version-item:last-child {
+            border-bottom: none;
+        }
+        
+        .version-user {
+            font-weight: bold;
+            color: #1565c0;
+        }
+        
+        .version-date {
+            color: #757575;
+            font-size: 12px;
+        }
+        
+        .keyboard-focused {
+            outline: 2px solid #2196f3;
+            outline-offset: -2px;
+        }
+        
+        .loading-indicator {
+            height: 3px;
+            background: linear-gradient(90deg, #f44336, #2196f3, #4caf50, #ff9800);
+            background-size: 400% 100%;
+            animation: loading 2s linear infinite;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Tabelin</h1>
+    <p>A comprehensive table library with freeze headers/columns, export functionality, lazy loading, server-side processing, custom context menu, and customizable styling.</p>
+    
+    <ul class="nav-tabs">
+        <li><button class="tab-button active" data-target="tab-basic">Basic Examples</button></li>
+        <li><button class="tab-button" data-target="tab-lazy-loading">Lazy Loading</button></li>
+        <li><button class="tab-button" data-target="tab-html-tables">HTML Tables</button></li>
+        <li><button class="tab-button" data-target="tab-server">Server-Side Processing</button></li>
+        <li><button class="tab-button" data-target="tab-context-menu">Context Menu</button></li>
+        <li><button class="tab-button" data-target="tab-styling">Custom Styling</button></li>
+        <li><button class="tab-button" data-target="tab-advanced">Advanced Features</button></li>
+    </ul>
+    
+    <div id="tab-basic" class="tab-content active">
+        <section class="demo-section">
+            <h2>Basic Table Demo</h2>
+            <div id="basic-table-container"></div>
+            <div class="code-example">
+                <pre>
+const basicTable = new Tabelin({
+    container: '#basic-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'age', title: 'Age' },
+        { field: 'email', title: 'Email' }
+    ],
+    data: generateDemoData(20)
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Freeze Header & Columns Demo <span class="feature-tag">Freeze</span></h2>
+            <div class="options-panel">
+                <label>
+                    <input type="checkbox" id="freeze-header" checked> Freeze Header
+                </label>
+                <label>
+                    Freeze Columns: 
+                    <select id="freeze-columns">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                    </select>
+                </label>
+                <button id="apply-freeze">Apply</button>
+            </div>
+            <div id="freeze-table-container"></div>
+            <div class="code-example">
+                <pre>
+const freezeTable = new Tabelin({
+    container: '#freeze-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'department', title: 'Department' },
+        { field: 'position', title: 'Position' },
+        { field: 'salary', title: 'Salary' },
+        { field: 'startDate', title: 'Start Date' },
+        { field: 'email', title: 'Email' }
+    ],
+    data: generateDemoData(50),
+    freezeHeader: true,
+    freezeColumns: 2
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Pagination Demo <span class="feature-tag">Pagination</span></h2>
+            <div class="options-panel">
+                <label>
+                    Page Size: 
+                    <select id="page-size">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+                <button id="apply-pagination">Apply</button>
+            </div>
+            <div id="pagination-table-container"></div>
+            <div class="code-example">
+                <pre>
+const paginationTable = new Tabelin({
+    container: '#pagination-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'email', title: 'Email' }
+    ],
+    data: generateDemoData(100),
+    pageSize: 10
+});
+                </pre>
+            </div>
+        </section>
+    </div>
+    
+    <div id="tab-lazy-loading" class="tab-content">
+        <section class="demo-section">
+            <h2>Lazy Loading (Infinite Scroll)</h2>
+            <p>Scroll down in the table below to load more data automatically without pagination. The data will continue loading as you scroll.</p>
+            <div id="lazy-loading-table-container"></div>
+            <div class="code-example">
+                <pre>
+// Using the convenient static method
+const lazyLoadingTable = Tabelin.createInfiniteTable(
+    '#lazy-loading-table-container',
+    [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'email', title: 'Email' },
+        { field: 'department', title: 'Department' }
+    ],
+    generateDemoData(500),
+    {
+        batchSize: 15,
+        loadThreshold: 100,
+        freezeHeader: true
+    }
+);
+
+// Equivalent to:
+new Tabelin({
+    container: '#lazy-loading-table-container',
+    columns: [...],
+    data: generateDemoData(500),
+    infiniteScroll: true,
+    pageSize: 15,
+    loadThreshold: 100,
+    freezeHeader: true
+});
+                </pre>
+            </div>
+        </section>
+    </div>
+    
+    <div id="tab-html-tables" class="tab-content">
+        <section class="demo-section">
+            <h2>Initialize from HTML Table</h2>
+            <p>Create an advanced table from an existing HTML table structure:</p>
+            
+            <div id="html-table-container">
+                <table id="existing-table">
+                    <thead>
+                        <tr>
+                            <th data-field="id">ID</th>
+                            <th data-field="firstName">First Name</th>
+                            <th data-field="lastName">Last Name</th>
+                            <th data-field="position">Position</th>
+                            <th data-field="department">Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>John</td>
+                            <td>Smith</td>
+                            <td>Manager</td>
+                            <td>Engineering</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Jane</td>
+                            <td>Doe</td>
+                            <td>Developer</td>
+                            <td>Engineering</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Mike</td>
+                            <td>Johnson</td>
+                            <td>Designer</td>
+                            <td>Marketing</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Lisa</td>
+                            <td>Brown</td>
+                            <td>Director</td>
+                            <td>HR</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>David</td>
+                            <td>Williams</td>
+                            <td>Analyst</td>
+                            <td>Finance</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <button id="init-from-html">Transform to Advanced Table</button>
+            
+            <div class="code-example">
+                <pre>
+// Using the convenient static method
+const htmlTable = Tabelin.fromHTML('#existing-table', {
+    freezeHeader: true,
+    freezeColumns: 1,
+    searchable: true,
+    sortable: true,
+    exportOptions: {
+        excel: true,
+        pdf: true,
+        print: true
+    }
+});
+
+// Equivalent to:
+new Tabelin({
+    container: '#html-table-container',
+    useHTML: '#existing-table',
+    freezeHeader: true,
+    freezeColumns: 1,
+    searchable: true,
+    sortable: true,
+    exportOptions: { excel: true, pdf: true, print: true }
+});
+                </pre>
+            </div>
+        </section>
+    </div>
+    
+    <div id="tab-server" class="tab-content">
+        <section class="demo-section">
+            <h2>Server-Side Processing <span class="feature-tag new-tag">New!</span></h2>
+            <p>This example simulates a server-side data source with search, sorting, and pagination functionality.</p>
+            
+            <div class="mock-api-controls">
+                <h3>Mock API Controls</h3>
+                <p>These controls simulate server-side behavior for the demo.</p>
+                <label>
+                    Response time (ms): 
+                    <input type="number" id="server-response-time" class="response-time" value="500" min="0" max="5000">
+                </label>
+                <label>
+                    <input type="checkbox" id="server-error" checked="false"> Simulate errors
+                </label>
+            </div>
+            
+            <div id="server-table-container"></div>
+            <div class="code-example">
+                <pre>
+// Using the convenient static method
+const serverTable = Tabelin.createServerTable(
+    '#server-table-container',
+    [
+        { field: 'id', title: 'ID', sortable: true },
+        { field: 'name', title: 'Name', sortable: true },
+        { field: 'email', title: 'Email' },
+        { field: 'department', title: 'Department', sortable: true },
+        { field: 'position', title: 'Position', sortable: true }
+    ],
+    'api/table-data',
+    {
+        pageSize: 10,
+        searchable: true,
+        sortable: true,
+        // Custom server params function
+        serverParams: function(params) {
+            return {
+                // Add any additional params your server needs
+                token: 'demo-token',
+                customParam: 'any-value'
+            };
+        }
+    }
+);
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Server-Side Lazy Loading <span class="feature-tag new-tag">New!</span></h2>
+            <p>This example simulates an infinitely scrolling server-side data source.</p>
+            <div id="server-lazy-table-container"></div>
+            <div class="code-example">
+                <pre>
+const serverLazyTable = new Tabelin({
+    container: '#server-lazy-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'email', title: 'Email' },
+        { field: 'department', title: 'Department' }
+    ],
+    pageSize: 20,
+    serverSide: true,
+    serverUrl: 'api/lazy-data',
+    infiniteScroll: true,
+    loadThreshold: 200,
+    searchable: true
+});
+                </pre>
+            </div>
+        </section>
+    </div>
+    
+    <div id="tab-context-menu" class="tab-content">
+        <section class="demo-section">
+            <h2>Context Menu <span class="feature-tag new-tag">New!</span></h2>
+            <p>Right-click on any row in the table below to see the custom context menu.</p>
+            <div id="context-menu-table-container"></div>
+            <div class="code-example">
+                <pre>
+const contextMenuTable = new Tabelin({
+    container: '#context-menu-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'email', title: 'Email' },
+        { field: 'department', title: 'Department' }
+    ],
+    data: generateDemoData(20),
+    // Static context menu items
+    contextMenu: [
+        { 
+            text: 'Edit Row',
+            icon: '✏️',
+            className: 'context-menu-primary',
+            action: function(rowData) {
+                alert(`Editing row with ID: ${rowData.id}`);
+            }
+        },
+        { 
+            text: 'Delete Row',
+            icon: '🗑️',
+            className: 'context-menu-danger',
+            action: function(rowData) {
+                alert(`Deleting row with ID: ${rowData.id}`);
+            }
+        },
+        { divider: true },
+        { 
+            text: 'View Details',
+            icon: '👁️',
+            action: function(rowData) {
+                alert(`View details for ${rowData.name}`);
+            }
+        },
+        {
+            text: 'Export Row',
+            icon: '📋',
+            action: function(rowData) {
+                alert(`Exporting data for ${rowData.name}`);
+            }
+        }
+    ]
+});
+
+// You can also use a function that returns contextMenu items dynamically:
+const dynamicContextMenuTable = new Tabelin({
+    // ...other options
+    contextMenu: function(rowData) {
+        return [
+            // Menu items can be customized based on rowData
+            { text: `Edit ${rowData.name}`, action: function() { /* do something */ } },
+            // Other items...
+        ];
+    }
+});
+                </pre>
+            </div>
+        </section>
+    </div>
+    
+    <div id="tab-styling" class="tab-content">
+        <section class="demo-section">
+            <h2>Predefined Themes <span class="feature-tag new-tag">New!</span></h2>
+            <div class="options-panel">
+                <label>
+                    Theme: 
+                    <select id="theme-selector">
+                        <option value="default">Default</option>
+                        <option value="dark">Dark</option>
+                        <option value="stripe">Striped</option>
+                        <option value="material">Material</option>
+                        <option value="compact">Compact</option>
+                        <option value="colorful">Colorful</option>
+                    </select>
+                </label>
+                <button id="apply-theme">Apply Theme</button>
+            </div>
+            <div id="theme-table-container"></div>
+            <div class="code-example">
+                <pre>
+const themedTable = new Tabelin({
+    container: '#theme-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'department', title: 'Department' },
+        { field: 'position', title: 'Position' }
+    ],
+    data: generateDemoData(20),
+    theme: 'material', // Choose from: 'default', 'dark', 'stripe', 'material', 'compact', 'colorful'
+    searchable: true
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Custom CSS Styling <span class="feature-tag new-tag">New!</span></h2>
+            <p>You can apply your own CSS classes and styles to the table:</p>
+            <div id="custom-style-table-container"></div>
+            <div class="code-example">
+                <pre>
+// Define custom CSS variables and styles in your stylesheet
+.custom-theme-table {
+    --header-bg: #3f51b5;
+    --header-text: white;
+    --row-hover: #f0f4ff;
+    --border-color: #c5cae9;
+    --accent-color: #3f51b5;
+}
+
+// Then apply the custom class to your table
+const customStyledTable = new Tabelin({
+    container: '#custom-style-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'department', title: 'Department' },
+        { field: 'position', title: 'Position' }
+    ],
+    data: generateDemoData(15),
+    cssClass: 'custom-theme-table',
+    // Customize row and cell styles with callbacks
+    rowClassName: function(row, index) {
+        return index % 2 === 0 ? 'even-row' : 'odd-row';
+    },
+    cellClassName: function(value, row, column, colIndex) {
+        if (column.field === 'department' && value === 'Engineering') {
+            return 'highlight-cell';
+        }
+        return '';
+    }
+});
+                </pre>
+            </div>
+            
+            <style>
+                .custom-theme-table .tabelin th {
+                    background-color: var(--header-bg, #3f51b5);
+                    color: var(--header-text, white);
+                    border-bottom: 2px solid var(--border-color, #c5cae9);
+                }
+                
+                .custom-theme-table .tabelin tr:hover td {
+                    background-color: var(--row-hover, #f0f4ff);
+                }
+                
+                .custom-theme-table .tabelin td {
+                    border-bottom: 1px solid var(--border-color, #c5cae9);
+                }
+                
+                .custom-theme-table .even-row {
+                    background-color: rgba(63, 81, 181, 0.05);
+                }
+                
+                .custom-theme-table .highlight-cell {
+                    font-weight: bold;
+                    color: var(--accent-color, #3f51b5);
+                }
+                
+                .custom-theme-table .tabelin-toolbar button,
+                .custom-theme-table .tabelin-pagination button:not(:disabled) {
+                    background-color: var(--accent-color, #3f51b5);
+                    color: white;
+                    border: none;
+                }
+                
+                .custom-theme-table .tabelin-search input:focus {
+                    border-color: var(--accent-color, #3f51b5);
+                    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.25);
+                }
+            </style>
+        </section>
+    </div>
+    
+    <div id="tab-advanced" class="tab-content">
+        <section class="demo-section">
+            <h2>Custom Cell Rendering <span class="feature-tag">Advanced</span></h2>
+            <div id="custom-render-table-container"></div>
+            <div class="code-example">
+                <pre>
+const customRenderTable = new Tabelin({
+    container: '#custom-render-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { 
+            field: 'status', 
+            title: 'Status',
+            render: (value, row) => {
+                const color = value === 'Active' ? 'green' : 'red';
+                return `<span style="color:${color};font-weight:bold">${value}</span>`;
+            }
+        },
+        { 
+            field: 'progress', 
+            title: 'Progress',
+            render: (value, row) => {
+                const percent = parseInt(value);
+                return `
+                    <div style="background:#eee;height:20px;width:100%;border-radius:10px;overflow:hidden">
+                        <div style="background:linear-gradient(90deg, #4CAF50, #8BC34A);height:100%;width:${percent}%;transition:width 0.3s"></div>
+                    </div>
+                    <span style="font-size:12px;color:#666;display:block;text-align:center;margin-top:3px">${percent}%</span>
+                `;
+            }
+        },
+        { 
+            field: 'actions', 
+            title: 'Actions',
+            render: (value, row) => {
+                return `
+                    <button class="action-btn" data-id="${row.id}" data-action="edit">Edit</button>
+                    <button class="action-btn" data-id="${row.id}" data-action="delete">Delete</button>
+                `;
+            }
+        }
+    ],
+    data: generateDemoData(20).map(item => ({
+        ...item,
+        status: Math.random() > 0.5 ? 'Active' : 'Inactive',
+        progress: Math.floor(Math.random() * 100)
+    })),
+    searchable: true,
+    resizableColumns: true
+});
+                </pre>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Cell Editing & Collaboration <span class="feature-tag new-tag">New!</span></h2>
+            <p>Double-click on any cell in the table to edit its value. Changes are tracked with version history.</p>
+            
+            <div class="options-panel">
+                <label>
+                    <input type="checkbox" id="enable-version-history" checked> Enable Version History
+                </label>
+                <label>
+                    User Name: 
+                    <select id="collaboration-user">
+                        <option value="John">John</option>
+                        <option value="Sarah">Sarah</option>
+                        <option value="Mike">Mike</option>
+                        <option value="Emma">Emma</option>
+                    </select>
+                </label>
+            </div>
+            
+            <div id="editable-table-container"></div>
+            <div class="code-example">
+                <pre>
+const editableTable = new Tabelin({
+    container: '#editable-table-container',
+    columns: [
+        { field: 'id', title: 'ID', editable: false },
+        { field: 'name', title: 'Name' },
+        { field: 'department', title: 'Department' },
+        { field: 'salary', title: 'Salary' }
+    ],
+    data: generateDemoData(10),
+    // Enable cell editing
+    collaboration: true,
+    collaborationMode: 'local', // 'local', 'websocket', 'polling'
+    collaborationUser: { name: 'John', id: 1, color: '#4CAF50' },
+    // Enable version history
+    versionHistory: true,
+    maxVersions: 10,
+    // Add note telling users how to access version history
+    footnote: 'Double-click to edit cells. Right-click and select "View Version History" to see changes.'
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Data Visualizations <span class="feature-tag new-tag">New!</span></h2>
+            <p>This example demonstrates integrated data visualizations with our table library.</p>
+            
+            <div class="options-panel">
+                <label>
+                    Visualization Position:
+                    <select id="vis-position">
+                        <option value="cell">Cell</option>
+                        <option value="row">Row</option>
+                        <option value="column">Column</option>
+                        <option value="summary" selected>Summary</option>
+                    </select>
+                </label>
+                <button id="apply-visualizations">Apply</button>
+            </div>
+            
+            <div id="visualizations-table-container"></div>
+            
+            <div class="code-example">
+                <pre>
+const visualizationsTable = new Tabelin({
+    container: '#visualizations-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'sales', title: 'Sales' },
+        { field: 'growth', title: 'Growth %' },
+        { field: 'profit', title: 'Profit' }
+    ],
+    data: generateSalesData(30),
+    visualizations: true,
+    visualizationPosition: 'summary',
+    visualizationTypes: ['bar', 'line', 'pie', 'sparkline'],
+    visualizationColors: ['#4CAF50', '#2196F3', '#FFC107', '#F44336', '#9C27B0'],
+    // Enable AI insights to analyze data patterns
+    aiInsights: true,
+    theme: 'material'
+});
+
+// Generate sample sales data
+function generateSalesData(count) {
+    const data = [];
+    const regions = ['North', 'South', 'East', 'West', 'Central'];
+    const products = ['Widgets', 'Gadgets', 'Devices', 'Tools', 'Accessories'];
+    
+    for (let i = 1; i <= count; i++) {
+        const sales = 10000 + Math.floor(Math.random() * 90000);
+        const growth = -10 + Math.floor(Math.random() * 40);
+        const profit = sales * (0.15 + Math.random() * 0.25); // 15-40% profit margin
+        
+        data.push({
+            id: i,
+            name: `${regions[i % regions.length]} - ${products[i % products.length]}`,
+            sales: sales,
+            growth: growth,
+            profit: Math.round(profit)
+        });
+    }
+    
+    return data;
+}
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Conditional Formatting <span class="feature-tag new-tag">New!</span></h2>
+            <p>Apply formatting rules based on cell values:</p>
+            
+            <div id="formatting-table-container"></div>
+            <div class="code-example">
+                <pre>
+const formattingTable = new Tabelin({
+    container: '#formatting-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'department', title: 'Department' },
+        { field: 'salary', title: 'Salary' },
+        { field: 'performance', title: 'Performance' },
+        { field: 'startDate', title: 'Start Date' },
+        { field: 'email', title: 'Email', width: 200 }
+    ],
+    data: generateDemoData(15).map(item => ({
+        ...item,
+        performance: ['Poor', 'Average', 'Good', 'Excellent'][Math.floor(Math.random() * 4)]
+    })),
+    // Enable conditional formatting
+    conditionalFormatting: true,
+    rules: [
+        {
+            field: 'salary',
+            condition: value => value > 80000,
+            style: { backgroundColor: '#e8f5e9', fontWeight: 'bold', color: '#2e7d32' }
+        },
+        {
+            field: 'salary', 
+            condition: value => value < 40000,
+            style: { backgroundColor: '#ffebee', color: '#c62828' }
+        },
+        {
+            field: 'performance',
+            condition: value => value === 'Excellent',
+            style: { backgroundColor: '#e3f2fd', fontWeight: 'bold', color: '#1565c0' }
+        },
+        {
+            field: 'performance',
+            condition: value => value === 'Poor',
+            style: { backgroundColor: '#ffebee', fontStyle: 'italic', color: '#b71c1c' }
+        }
+    ],
+    // Enable smart formatting
+    smartFormatting: true,
+    formatDetection: {
+        numbers: true,  // Auto-format numbers (currency, percentages, etc.)
+        dates: true,    // Auto-format dates
+        urls: true,     // Auto-format URLs as links
+        emails: true    // Auto-format emails as mailto links
+    }
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Business Rules & Validation <span class="feature-tag new-tag">New!</span></h2>
+            <p>Apply business rules and validation to your data:</p>
+            
+            <div id="validation-table-container"></div>
+            <div class="code-example">
+                <pre>
+const validationTable = new Tabelin({
+    container: '#validation-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'email', title: 'Email' },
+        { field: 'age', title: 'Age' },
+        { field: 'salary', title: 'Salary' }
+    ],
+    data: generateDemoData(10),
+    // Make cells editable
+    collaboration: true,
+    // Enable validation for edits
+    validateOnEdit: true,
+    showValidationMessages: true,
+    // Define business rules
+    businessRules: [
+        {
+            field: 'email',
+            rule: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+            message: 'Please enter a valid email address'
+        },
+        {
+            field: 'age',
+            rule: value => value >= 18 && value <= 65,
+            message: 'Age must be between 18 and 65'
+        },
+        {
+            field: 'salary',
+            rule: value => value >= 30000,
+            message: 'Salary must be at least $30,000'
+        },
+        {
+            field: 'name',
+            rule: value => value.length >= 2,
+            message: 'Name must be at least 2 characters'
+        }
+    ]
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>AI-Powered Insights <span class="feature-tag new-tag">New!</span></h2>
+            <p>Automatically analyze data patterns and display insights:</p>
+            
+            <div id="insights-table-container"></div>
+            <div class="code-example">
+                <pre>
+const insightsTable = new Tabelin({
+    container: '#insights-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'department', title: 'Department' },
+        { field: 'salary', title: 'Salary' },
+        { field: 'salesTarget', title: 'Sales Target' },
+        { field: 'salesActual', title: 'Sales Actual' }
+    ],
+    data: generateInsightData(50),
+    // Enable AI insights
+    aiInsights: true,
+    insightsPosition: 'top', // 'top', 'bottom', 'tooltip'
+    insightsThreshold: 0.7, // Confidence threshold
+    // Add other options
+    searchable: true,
+    sortable: true,
+    theme: 'material'
+});
+
+// Generate sample data with patterns for insights to detect
+function generateInsightData(count) {
+    const departments = ['Sales', 'Marketing', 'Engineering', 'HR', 'Finance'];
+    const data = [];
+    
+    for (let i = 1; i <= count; i++) {
+        const department = departments[Math.floor(Math.random() * departments.length)];
+        const baseSalary = department === 'Sales' ? 55000 : 
+                          department === 'Engineering' ? 75000 : 
+                          department === 'Marketing' ? 60000 : 
+                          department === 'Finance' ? 70000 : 50000;
+        
+        // Create salary variations within departments
+        const salary = baseSalary + Math.floor(Math.random() * 30000);
+        
+        // Generate sales targets and actuals with meaningful relationship
+        const salesTarget = department === 'Sales' ? 100000 + Math.floor(Math.random() * 50000) : 0;
+        
+        // Create a pattern: half of sales people exceed targets, half don't
+        const performance = Math.random() > 0.5 ? 1.2 : 0.8;
+        const salesActual = department === 'Sales' ? Math.floor(salesTarget * performance) : 0;
+        
+        const demoUser = generateDemoData(1)[0];
+        data.push({
+            ...demoUser,
+            department,
+            salary,
+            salesTarget,
+            salesActual
+        });
+    }
+    
+    // Add some outliers and patterns for the AI to detect
+    if (data.length > 10) {
+        data[3].salary = 150000; // Outlier
+        data[7].salary = 25000;  // Outlier
+        
+        // Pattern: make everyone in marketing have better sales performance
+        data.forEach(item => {
+            if (item.department === 'Marketing' && item.salesTarget > 0) {
+                item.salesActual = Math.floor(item.salesTarget * 1.3);
+            }
+        });
+    }
+    
+    return data;
+}
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Distribution Charts & Statistics <span class="feature-tag new-tag">New!</span></h2>
+            <p>View statistical distribution of your numeric data:</p>
+            
+            <div id="distribution-table-container"></div>
+            <div class="code-example">
+                <pre>
+const distributionTable = new Tabelin({
+    container: '#distribution-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'age', title: 'Age' },
+        { field: 'experience', title: 'Experience (Years)' },
+        { field: 'salary', title: 'Salary' },
+        { field: 'performance', title: 'Performance Score' }
+    ],
+    data: generateDistributionData(100),
+    // Enable visualizations with distribution charts
+    visualizations: true,
+    visualizationPosition: 'summary',
+    visualizationTypes: ['distribution'],
+    // Add other features
+    searchable: true,
+    sortable: true
+});
+
+// Generate normally distributed data
+function generateDistributionData(count) {
+    function normalRandom(mean, stdDev) {
+        // Box-Muller transform for normal distribution
+        const u1 = Math.random();
+        const u2 = Math.random();
+        const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+        return z0 * stdDev + mean;
+    }
+    
+    const data = [];
+    
+    for (let i = 1; i <= count; i++) {
+        const age = Math.round(normalRandom(35, 8));
+        const experience = Math.max(0, Math.round(normalRandom(age - 22, 5))); // experience related to age
+        const performance = Math.min(100, Math.max(0, Math.round(normalRandom(70, 15)))); // performance score 0-100
+        
+        // Salary based on experience and performance
+        const baseSalary = 40000 + (experience * 2000);
+        const performanceBonus = performance * 200;
+        const salary = Math.round(baseSalary + performanceBonus);
+        
+        const demoUser = generateDemoData(1)[0];
+        data.push({
+            ...demoUser,
+            age,
+            experience,
+            performance,
+            salary
+        });
+    }
+    
+    return data;
+}
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Search & Sort <span class="feature-tag">Advanced</span></h2>
+            <div id="search-sort-table-container"></div>
+            <div class="code-example">
+                <pre>
+const searchSortTable = new Tabelin({
+    container: '#search-sort-table-container',
+    columns: [
+        { field: 'id', title: 'ID', sortable: true },
+        { field: 'name', title: 'Name', sortable: true },
+        { field: 'department', title: 'Department', sortable: true },
+        { field: 'salary', title: 'Salary', sortable: true },
+        { field: 'startDate', title: 'Start Date', sortable: false }
+    ],
+    data: generateDemoData(50),
+    searchable: true,
+    sortable: true
+});
+                </pre>
+            </div>
+        </section>
+        
+        <section class="demo-section">
+            <h2>Keyboard Navigation & Accessibility <span class="feature-tag new-tag">New!</span></h2>
+            <p>Navigate the table using keyboard shortcuts:</p>
+            
+            <div class="keyboard-shortcuts">
+                <h3>Available Shortcuts:</h3>
+                <ul>
+                    <li><strong>Arrow Keys</strong> - Navigate between cells</li>
+                    <li><strong>Enter</strong> - Edit current cell (when editing is enabled)</li>
+                    <li><strong>Tab / Shift+Tab</strong> - Move to next/previous cell</li>
+                    <li><strong>Page Up / Page Down</strong> - Navigate between pages</li>
+                    <li><strong>Home / End</strong> - Go to first/last cell in row</li>
+                    <li><strong>Ctrl+Home / Ctrl+End</strong> - Go to first/last cell in table</li>
+                </ul>
+            </div>
+            
+            <div id="keyboard-nav-table-container"></div>
+            <div class="code-example">
+                <pre>
+const keyboardNavTable = new Tabelin({
+    container: '#keyboard-nav-table-container',
+    columns: [
+        { field: 'id', title: 'ID' },
+        { field: 'name', title: 'Name' },
+        { field: 'email', title: 'Email' },
+        { field: 'department', title: 'Department' },
+        { field: 'position', title: 'Position' }
+    ],
+    data: generateDemoData(15),
+    // Enable keyboard navigation
+    keyboardNavigation: true,
+    keyboardShortcuts: true,
+    // Accessibility features
+    accessibleHeaders: true,
+    focusableRows: true,
+    ariaLabels: {
+        table: 'Employee Data Table',
+        search: 'Search employee records',
+        pagination: 'Table pagination controls',
+        sortAsc: 'Sort column ascending',
+        sortDesc: 'Sort column descending',
+        row: index => `Employee record ${index + 1}`
+    },
+    // Make table cells editable
+    collaboration: true
+});
+                </pre>
+            </div>
+        </section>
+    </div>
+
+<script src="https://unpkg.com/tablein/dist/tablein.min.js"></script>
+    
+    <script>
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                button.classList.add('active');
+                document.getElementById(button.getAttribute('data-target')).classList.add('active');
+            });
+        });
+    
+        function generateDemoData(count) {
+            const departments = ['Engineering', 'Marketing', 'Finance', 'HR', 'Sales'];
+            const positions = ['Manager', 'Senior', 'Junior', 'Intern', 'Director'];
+            const firstNames = ['John', 'Jane', 'Mike', 'Emily', 'David', 'Sarah', 'Alex', 'Lisa'];
+            const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller', 'Davis', 'Wilson'];
+            
+            const data = [];
+            
+            for (let i = 1; i <= count; i++) {
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                const name = `${firstName} ${lastName}`;
+                
+                data.push({
+                    id: i,
+                    name: name,
+                    firstName: firstName,
+                    lastName: lastName,
+                    age: 20 + Math.floor(Math.random() * 40),
+                    email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,
+                    department: departments[Math.floor(Math.random() * departments.length)],
+                    position: positions[Math.floor(Math.random() * positions.length)],
+                    salary: 30000 + Math.floor(Math.random() * 70000),
+                    startDate: new Date(2015 + Math.floor(Math.random() * 8), 
+                                       Math.floor(Math.random() * 28) + 1).toLocaleDateString()
+                });
+            }
+            
+            return data;
+        }
+
+        const basicTable = new Tabelin({
+            container: '#basic-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'age', title: 'Age' },
+                { field: 'email', title: 'Email' }
+            ],
+            data: generateDemoData(20)
+        });
+        
+        let freezeTable = new Tabelin({
+            container: '#freeze-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'department', title: 'Department' },
+                { field: 'position', title: 'Position' },
+                { field: 'salary', title: 'Salary' },
+                { field: 'startDate', title: 'Start Date' },
+                { field: 'email', title: 'Email' }
+            ],
+            data: generateDemoData(50),
+            freezeHeader: true,
+            freezeColumns: 2
+        });
+        
+        document.getElementById('apply-freeze').addEventListener('click', () => {
+            const container = document.getElementById('freeze-table-container');
+            container.innerHTML = '';
+            
+            freezeTable = new Tabelin({
+                container: '#freeze-table-container',
+                columns: [
+                    { field: 'id', title: 'ID' },
+                    { field: 'name', title: 'Name' },
+                    { field: 'department', title: 'Department' },
+                    { field: 'position', title: 'Position' },
+                    { field: 'salary', title: 'Salary' },
+                    { field: 'startDate', title: 'Start Date' },
+                    { field: 'email', title: 'Email' }
+                ],
+                data: generateDemoData(50),
+                freezeHeader: document.getElementById('freeze-header').checked,
+                freezeColumns: parseInt(document.getElementById('freeze-columns').value, 10)
+            });
+        });
+        
+        let paginationTable = new Tabelin({
+            container: '#pagination-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'email', title: 'Email' }
+            ],
+            data: generateDemoData(100),
+            pageSize: 10
+        });
+        
+        document.getElementById('apply-pagination').addEventListener('click', () => {
+            const container = document.getElementById('pagination-table-container');
+            container.innerHTML = '';
+            
+            paginationTable = new Tabelin({
+                container: '#pagination-table-container',
+                columns: [
+                    { field: 'id', title: 'ID' },
+                    { field: 'name', title: 'Name' },
+                    { field: 'email', title: 'Email' }
+                ],
+                data: generateDemoData(100),
+                pageSize: parseInt(document.getElementById('page-size').value, 10)
+            });
+        });
+        
+        const lazyLoadingTable = Tabelin.createInfiniteTable(
+            '#lazy-loading-table-container',
+            [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'email', title: 'Email' },
+                { field: 'department', title: 'Department' }
+            ],
+            generateDemoData(500),
+            {
+                batchSize: 15,
+                loadThreshold: 100,
+                freezeHeader: true
+            }
+        );
+        
+        class MockServerAPI {
+            constructor() {
+                this.data = generateDemoData(300);
+                this.totalRecords = this.data.length;
+            }
+            
+            getData(params) {
+                return new Promise((resolve, reject) => {
+                    const responseTime = parseInt(document.getElementById('server-response-time').value, 10) || 500;
+                    
+                    setTimeout(() => {
+                        const simulateError = document.getElementById('server-error').checked;
+                        
+                        if (simulateError && Math.random() < 0.3) {
+                            return reject({ error: 'Simulated server error', message: 'This is a fake error for demonstration purposes' });
+                        }
+                        
+                        let filteredData = [...this.data];
+                        if (params.search) {
+                            const searchLower = params.search.toLowerCase();
+                            filteredData = filteredData.filter(item => 
+                                Object.values(item).some(val => 
+                                    val && val.toString().toLowerCase().includes(searchLower)
+                                )
+                            );
+                        }
+                        
+                        const filteredTotal = filteredData.length;
+                        
+                        if (params.sortField) {
+                            filteredData.sort((a, b) => {
+                                let valA = a[params.sortField];
+                                let valB = b[params.sortField];
+                                
+                                if (typeof valA === 'string') {
+                                    valA = valA.toLowerCase();
+                                    valB = valB.toLowerCase();
+                                }
+                                
+                                if (valA < valB) return params.sortDirection === 'asc' ? -1 : 1;
+                                if (valA > valB) return params.sortDirection === 'asc' ? 1 : -1;
+                                return 0;
+                            });
+                        }
+                        
+                        const start = (params.page - 1) * params.pageSize;
+                        const paginatedData = filteredData.slice(start, start + params.pageSize);
+                        
+                        resolve({
+                            data: paginatedData,
+                            total: filteredTotal,
+                            page: params.page,
+                            pageSize: params.pageSize,
+                            totalPages: Math.ceil(filteredTotal / params.pageSize)
+                        });
+                    }, responseTime);
+                });
+            }
+            
+            getLazyData(params) {
+                return new Promise((resolve, reject) => {
+                    const responseTime = parseInt(document.getElementById('server-response-time').value, 10) || 500;
+                    
+                    setTimeout(() => {
+                        const start = params.offset || 0;
+                        const limit = params.limit || 20;
+                        const data = this.data.slice(start, start + limit);
+                        
+                        resolve({
+                            data: data,
+                            total: this.totalRecords,
+                            offset: start,
+                            hasMore: start + limit < this.totalRecords
+                        });
+                    }, responseTime);
+                });
+            }
+        }
+        
+        const mockApi = new MockServerAPI();
+        
+        const serverTable = new Tabelin({
+            container: '#server-table-container',
+            columns: [
+                { field: 'id', title: 'ID', sortable: true },
+                { field: 'name', title: 'Name', sortable: true },
+                { field: 'email', title: 'Email' },
+                { field: 'department', title: 'Department', sortable: true },
+                { field: 'position', title: 'Position', sortable: true }
+            ],
+            serverSide: true,
+            serverUrl: 'data-api.php?endpoint=table-data',
+            pageSize: 10,
+            searchable: true,
+            sortable: true
+        });
+        
+        const serverLazyTable = new Tabelin({
+            container: '#server-lazy-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'email', title: 'Email' },
+                { field: 'department', title: 'Department' }
+            ],
+            pageSize: 20,
+            serverSide: true,
+            serverUrl: 'data-api.php?endpoint=lazy-data',
+            infiniteScroll: true,
+            loadThreshold: 200,
+            searchable: true
+        });
+        
+        const contextMenuTable = new Tabelin({
+            container: '#context-menu-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'email', title: 'Email' },
+                { field: 'department', title: 'Department' }
+            ],
+            data: generateDemoData(20),
+            contextMenu: [
+                { 
+                    text: 'Edit Row',
+                    icon: '✏️',
+                    className: 'context-menu-primary',
+                    action: function(rowData) {
+                        alert(`Editing row with ID: ${rowData.id}`);
+                    }
+                },
+                { 
+                    text: 'Delete Row',
+                    icon: '🗑️',
+                    className: 'context-menu-danger',
+                    action: function(rowData) {
+                        alert(`Deleting row with ID: ${rowData.id}`);
+                    }
+                },
+                { divider: true },
+                { 
+                    text: 'View Details',
+                    icon: '👁️',
+                    action: function(rowData) {
+                        alert(`View details for ${rowData.name}`);
+                    }
+                },
+                {
+                    text: 'Export Row',
+                    icon: '📋',
+                    action: function(rowData) {
+                        alert(`Exporting data for ${rowData.name}`);
+                    }
+                }
+            ]
+        });
+        
+        const themes = ['default', 'dark', 'stripe', 'material', 'compact', 'colorful'];
+        const themeSelector = document.getElementById('theme-selector');
+        themes.forEach(theme => {
+            const option = document.createElement('option');
+            option.value = theme;
+            option.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+            themeSelector.appendChild(option);
+        });
+        
+        let themeTable = new Tabelin({
+            container: '#theme-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'department', title: 'Department' },
+                { field: 'position', title: 'Position' }
+            ],
+            data: generateDemoData(20),
+            theme: 'default',
+            searchable: true
+        });
+        
+        document.getElementById('apply-theme').addEventListener('click', () => {
+            const container = document.getElementById('theme-table-container');
+            container.innerHTML = '';
+            
+            const selectedTheme = document.getElementById('theme-selector').value;
+            
+            themeTable = new Tabelin({
+                container: '#theme-table-container',
+                columns: [
+                    { field: 'id', title: 'ID' },
+                    { field: 'name', title: 'Name' },
+                    { field: 'department', title: 'Department' },
+                    { field: 'position', title: 'Position' }
+                ],
+                data: generateDemoData(20),
+                theme: selectedTheme,
+                searchable: true
+            });
+        });
+        
+        const customStyledTable = new Tabelin({
+            container: '#custom-style-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'department', title: 'Department' },
+                { field: 'position', title: 'Position' }
+            ],
+            data: generateDemoData(15),
+            cssClass: 'custom-theme-table',
+            searchable: true,
+            rowClassName: function(row, index) {
+                return index % 2 === 0 ? 'even-row' : 'odd-row';
+            },
+            cellClassName: function(value, row, column, colIndex) {
+                if (column.field === 'department' && value === 'Engineering') {
+                    return 'highlight-cell';
+                }
+                return '';
+            }
+        });
+        
+        const existingTable = document.getElementById('existing-table');
+        const existingTableHead = existingTable.querySelector('thead');
+        const existingTableBody = existingTable.querySelector('tbody');
+        
+        const headerRow = document.createElement('tr');
+        const headers = ['ID', 'Name', 'Email', 'Department'];
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            th.setAttribute('data-field', header.toLowerCase());
+            headerRow.appendChild(th);
+        });
+        existingTableHead.appendChild(headerRow);
+        
+        const sampleData = generateDemoData(5);
+        sampleData.forEach(item => {
+            const row = document.createElement('tr');
+            
+            const idCell = document.createElement('td');
+            idCell.textContent = item.id;
+            row.appendChild(idCell);
+            
+            const nameCell = document.createElement('td');
+            nameCell.textContent = item.name;
+            row.appendChild(nameCell);
+            
+            const emailCell = document.createElement('td');
+            emailCell.textContent = item.email;
+            row.appendChild(emailCell);
+            
+            const deptCell = document.createElement('td');
+            deptCell.textContent = item.department;
+            row.appendChild(deptCell);
+            
+            existingTableBody.appendChild(row);
+        });
+        
+        document.getElementById('init-from-html').addEventListener('click', () => {
+            const htmlTable = Tabelin.fromHTML('#existing-table', {
+                freezeHeader: true,
+                freezeColumns: 1,
+                searchable: true,
+                sortable: true,
+                exportOptions: {
+                    excel: true,
+                    pdf: true,
+                    print: true
+                }
+            });
+            
+            document.getElementById('init-from-html').disabled = true;
+            document.getElementById('init-from-html').textContent = 'Table Transformed!';
+        });
+        
+        const customRenderTable = new Tabelin({
+            container: '#custom-render-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { 
+                    field: 'status', 
+                    title: 'Status',
+                    render: (value, row) => {
+                        const color = value === 'Active' ? 'green' : 'red';
+                        return `<span style="color:${color};font-weight:bold">${value}</span>`;
+                    }
+                },
+                { 
+                    field: 'progress', 
+                    title: 'Progress',
+                    render: (value, row) => {
+                        const percent = parseInt(value);
+                        return `
+                            <div style="background:#eee;height:20px;width:100%;border-radius:10px;overflow:hidden">
+                                <div style="background:linear-gradient(90deg, #4CAF50, #8BC34A);height:100%;width:${percent}%;transition:width 0.3s"></div>
+                            </div>
+                            <span style="font-size:12px;color:#666;display:block;text-align:center;margin-top:3px">${percent}%</span>
+                        `;
+                    }
+                },
+                { 
+                    field: 'actions', 
+                    title: 'Actions',
+                    render: (value, row) => {
+                        return `
+                            <button class="action-btn" data-id="${row.id}" data-action="edit">Edit</button>
+                            <button class="action-btn" data-id="${row.id}" data-action="delete">Delete</button>
+                        `;
+                    }
+                }
+            ],
+            data: generateDemoData(20).map(item => ({
+                ...item,
+                status: Math.random() > 0.5 ? 'Active' : 'Inactive',
+                progress: Math.floor(Math.random() * 100)
+            })),
+            searchable: true,
+            resizableColumns: true
+        });
+        
+        const searchSortTable = new Tabelin({
+            container: '#search-sort-table-container',
+            columns: [
+                { field: 'id', title: 'ID', sortable: true },
+                { field: 'name', title: 'Name', sortable: true },
+                { field: 'department', title: 'Department', sortable: true },
+                { field: 'salary', title: 'Salary', sortable: true },
+                { field: 'startDate', title: 'Start Date', sortable: false }
+            ],
+            data: generateDemoData(50),
+            searchable: true,
+            sortable: true
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('action-btn')) {
+                const id = e.target.getAttribute('data-id');
+                const action = e.target.getAttribute('data-action');
+                
+                alert(`Action: ${action} on row with ID: ${id}`);
+            }
+        });
+        
+        function generateSalesData(count) {
+            const data = [];
+            const regions = ['North', 'South', 'East', 'West', 'Central'];
+            const products = ['Widgets', 'Gadgets', 'Devices', 'Tools', 'Accessories'];
+            
+            for (let i = 1; i <= count; i++) {
+                const sales = 10000 + Math.floor(Math.random() * 90000);
+                const growth = -10 + Math.floor(Math.random() * 40);
+                const profit = sales * (0.15 + Math.random() * 0.25);
+                
+                data.push({
+                    id: i,
+                    name: `${regions[i % regions.length]} - ${products[i % products.length]}`,
+                    sales: sales,
+                    growth: growth,
+                    profit: Math.round(profit)
+                });
+            }
+            
+            return data;
+        }
+        
+        const visualizationsTable = new Tabelin({
+            container: '#visualizations-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'sales', title: 'Sales' },
+                { field: 'growth', title: 'Growth %' },
+                { field: 'profit', title: 'Profit' }
+            ],
+            data: generateSalesData(30),
+            visualizations: true,
+            visualizationPosition: 'summary',
+            visualizationTypes: ['bar', 'line', 'pie', 'sparkline'],
+            visualizationColors: ['#4CAF50', '#2196F3', '#FFC107', '#F44336', '#9C27B0'],
+            aiInsights: true,
+            theme: 'material'
+        });
+        
+        document.getElementById('apply-visualizations').addEventListener('click', () => {
+            const container = document.getElementById('visualizations-table-container');
+            container.innerHTML = '';
+            
+            const selectedPosition = document.getElementById('vis-position').value;
+            
+            const visualizationsTable = new Tabelin({
+                container: '#visualizations-table-container',
+                columns: [
+                    { field: 'id', title: 'ID' },
+                    { field: 'name', title: 'Name' },
+                    { field: 'sales', title: 'Sales' },
+                    { field: 'growth', title: 'Growth %' },
+                    { field: 'profit', title: 'Profit' }
+                ],
+                data: generateSalesData(30),
+                visualizations: true,
+                visualizationPosition: selectedPosition,
+                visualizationTypes: ['bar', 'line', 'pie', 'sparkline'],
+                visualizationColors: ['#4CAF50', '#2196F3', '#FFC107', '#F44336', '#9C27B0'],
+                aiInsights: true,
+                theme: 'material'
+            });
+        });
+        
+        function updateEditableTable() {
+            const container = document.getElementById('editable-table-container');
+            container.innerHTML = '';
+            
+            const enableVersionHistory = document.getElementById('enable-version-history').checked;
+            const userName = document.getElementById('collaboration-user').value;
+            
+            const editableTable = new Tabelin({
+                container: '#editable-table-container',
+                columns: [
+                    { field: 'id', title: 'ID', editable: false },
+                    { field: 'name', title: 'Name' },
+                    { field: 'department', title: 'Department' },
+                    { field: 'salary', title: 'Salary' }
+                ],
+                data: generateDemoData(10),
+                collaboration: true,
+                collaborationMode: 'local',
+                collaborationUser: { name: userName, id: userName, color: '#4CAF50' },
+                versionHistory: enableVersionHistory,
+                maxVersions: 10,
+                contextMenu: [
+                    { 
+                        text: 'Edit Cell',
+                        icon: '✏️',
+                        action: function(rowData, rowIndex, colIndex) {
+                            console.log('Edit cell at', rowIndex, colIndex);
+                        }
+                    },
+                    { divider: true },
+                    ...(enableVersionHistory ? [{ 
+                        text: 'View Version History',
+                        icon: '🕒',
+                        action: function(rowData, rowIndex, colIndex) {
+                            alert(`Version history for ${rowData.name}'s ${colIndex} would show here`);
+                        }
+                    }] : [])
+                ],
+                footnote: 'Double-click to edit cells. ' + 
+                    (enableVersionHistory ? 'Right-click and select "View Version History" to see changes.' : '')
+            });
+        }
+        
+        updateEditableTable();
+        
+        document.getElementById('enable-version-history').addEventListener('change', updateEditableTable);
+        document.getElementById('collaboration-user').addEventListener('change', updateEditableTable);
+        
+        const formattingTable = new Tabelin({
+            container: '#formatting-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'department', title: 'Department' },
+                { field: 'salary', title: 'Salary' },
+                { field: 'performance', title: 'Performance' },
+                { field: 'startDate', title: 'Start Date' },
+                { field: 'email', title: 'Email', width: 200 }
+            ],
+            data: generateDemoData(15).map(item => ({
+                ...item,
+                performance: ['Poor', 'Average', 'Good', 'Excellent'][Math.floor(Math.random() * 4)]
+            })),
+            conditionalFormatting: true,
+            rules: [
+                {
+                    field: 'salary',
+                    condition: value => value > 80000,
+                    style: { backgroundColor: '#e8f5e9', fontWeight: 'bold', color: '#2e7d32' }
+                },
+                {
+                    field: 'salary', 
+                    condition: value => value < 40000,
+                    style: { backgroundColor: '#ffebee', color: '#c62828' }
+                },
+                {
+                    field: 'performance',
+                    condition: value => value === 'Excellent',
+                    style: { backgroundColor: '#e3f2fd', fontWeight: 'bold', color: '#1565c0' }
+                },
+                {
+                    field: 'performance',
+                    condition: value => value === 'Poor',
+                    style: { backgroundColor: '#ffebee', fontStyle: 'italic', color: '#b71c1c' }
+                }
+            ],
+            smartFormatting: true,
+            formatDetection: {
+                numbers: true,
+                dates: true,
+                urls: true,
+                emails: true
+            }
+        });
+        
+        const validationTable = new Tabelin({
+            container: '#validation-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'email', title: 'Email' },
+                { field: 'age', title: 'Age' },
+                { field: 'salary', title: 'Salary' }
+            ],
+            data: generateDemoData(10),
+            collaboration: true,
+            validateOnEdit: true,
+            showValidationMessages: true,
+            businessRules: [
+                {
+                    field: 'email',
+                    rule: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                    message: 'Please enter a valid email address'
+                },
+                {
+                    field: 'age',
+                    rule: value => value >= 18 && value <= 65,
+                    message: 'Age must be between 18 and 65'
+                },
+                {
+                    field: 'salary',
+                    rule: value => value >= 30000,
+                    message: 'Salary must be at least $30,000'
+                },
+                {
+                    field: 'name',
+                    rule: value => value.length >= 2,
+                    message: 'Name must be at least 2 characters'
+                }
+            ]
+        });
+        
+        function generateInsightData(count) {
+            const departments = ['Sales', 'Marketing', 'Engineering', 'HR', 'Finance'];
+            const data = [];
+            
+            for (let i = 1; i <= count; i++) {
+                const department = departments[Math.floor(Math.random() * departments.length)];
+                const baseSalary = department === 'Sales' ? 55000 : 
+                                  department === 'Engineering' ? 75000 : 
+                                  department === 'Marketing' ? 60000 : 
+                                  department === 'Finance' ? 70000 : 50000;
+                
+                const salary = baseSalary + Math.floor(Math.random() * 30000);
+                
+                const salesTarget = department === 'Sales' ? 100000 + Math.floor(Math.random() * 50000) : 0;
+                
+                const performance = Math.random() > 0.5 ? 1.2 : 0.8;
+                const salesActual = department === 'Sales' ? Math.floor(salesTarget * performance) : 0;
+                
+                const demoUser = generateDemoData(1)[0];
+                data.push({
+                    ...demoUser,
+                    department,
+                    salary,
+                    salesTarget,
+                    salesActual
+                });
+            }
+            
+            if (data.length > 10) {
+                data[3].salary = 150000;
+                data[7].salary = 25000;
+                
+                data.forEach(item => {
+                    if (item.department === 'Marketing' && item.salesTarget > 0) {
+                        item.salesActual = Math.floor(item.salesTarget * 1.3);
+                    }
+                });
+            }
+            
+            return data;
+        }
+        
+        const insightsTable = new Tabelin({
+            container: '#insights-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'department', title: 'Department' },
+                { field: 'salary', title: 'Salary' },
+                { field: 'salesTarget', title: 'Sales Target' },
+                { field: 'salesActual', title: 'Sales Actual' }
+            ],
+            data: generateInsightData(50),
+            aiInsights: true,
+            insightsPosition: 'top',
+            insightsThreshold: 0.7,
+            searchable: true,
+            sortable: true,
+            theme: 'material'
+        });
+        
+        function generateDistributionData(count) {
+            function normalRandom(mean, stdDev) {
+                const u1 = Math.random();
+                const u2 = Math.random();
+                const z0 = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+                return z0 * stdDev + mean;
+            }
+            
+            const data = [];
+            
+            for (let i = 1; i <= count; i++) {
+                const age = Math.round(normalRandom(35, 8));
+                const experience = Math.max(0, Math.round(normalRandom(age - 22, 5)));
+                const performance = Math.min(100, Math.max(0, Math.round(normalRandom(70, 15))));
+                
+                const baseSalary = 40000 + (experience * 2000);
+                const performanceBonus = performance * 200;
+                const salary = Math.round(baseSalary + performanceBonus);
+                
+                const demoUser = generateDemoData(1)[0];
+                data.push({
+                    ...demoUser,
+                    age,
+                    experience,
+                    performance,
+                    salary
+                });
+            }
+            
+            return data;
+        }
+        
+        const distributionTable = new Tabelin({
+            container: '#distribution-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'age', title: 'Age' },
+                { field: 'experience', title: 'Experience (Years)' },
+                { field: 'salary', title: 'Salary' },
+                { field: 'performance', title: 'Performance Score' }
+            ],
+            data: generateDistributionData(100),
+            visualizations: true,
+            visualizationPosition: 'summary',
+            visualizationTypes: ['distribution'],
+            searchable: true,
+            sortable: true
+        });
+        
+        const keyboardNavTable = new Tabelin({
+            container: '#keyboard-nav-table-container',
+            columns: [
+                { field: 'id', title: 'ID' },
+                { field: 'name', title: 'Name' },
+                { field: 'email', title: 'Email' },
+                { field: 'department', title: 'Department' },
+                { field: 'position', title: 'Position' }
+            ],
+            data: generateDemoData(15),
+            keyboardNavigation: true,
+            keyboardShortcuts: true,
+            accessibleHeaders: true,
+            focusableRows: true,
+            ariaLabels: {
+                table: 'Employee Data Table',
+                search: 'Search employee records',
+                pagination: 'Table pagination controls',
+                sortAsc: 'Sort column ascending',
+                sortDesc: 'Sort column descending',
+                row: index => `Employee record ${index + 1}`
+            },
+            collaboration: true
+        });
+    </script>
+</body>
+</html>

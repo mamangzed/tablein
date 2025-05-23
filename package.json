@@ -9,6 +9,7 @@
     "files": [
         "dist/tablein.min.js"
     ],
+    "homepage": "https://mamangzed.github.io/tablein/",
     "scripts": {
         "build": "terser src/tablein.js -c -m -o dist/tablein.min.js",
         "semantic-release": "semantic-release"

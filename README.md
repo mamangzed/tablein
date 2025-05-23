@@ -2,6 +2,10 @@
 
 A powerful, feature-rich JavaScript table library for creating interactive, customizable tables with advanced functionality.
 
+## Demo
+
+Check out the [interactive demo](https://mamangzed.github.io/tablein/) to see Tablein in action.
+
 ## Features
 
 - **Client & Server-Side Operations**: Support for both client-side and server-side data processing
@@ -51,7 +55,9 @@ Include the library in your HTML:
 <script src="https://unpkg.com/html2pdf.js/dist/html2pdf.bundle.min.js"></script>
 
 <!-- Tabelin library -->
-<script src="https://cdn.example.com/tabelin.min.js"></script>
+<script src="https://unpkg.com/tablein/dist/tablein.min.js"></script>
+<!-- or -->
+ <script src="https://cdn.jsdelivr.net/npm/tablein/dist/tablein.min.js"></script>
 ```
 
 ### Using npm
