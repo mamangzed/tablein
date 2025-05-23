@@ -3,15 +3,14 @@
     "publishConfig": {
         "access": "public"
     },
-    "version": "0.0.1",
+    "version": "0.0.0-development",
     "description": "Table generator library",
     "main": "dist/tablein.min.js",
     "files": [
         "dist/tablein.min.js"
     ],
     "scripts": {
-        "build": "node build.js",
-        "prepublishOnly": "npm run build"
+        "semantic-release": "semantic-release"
     },
     "keywords": [
         "table",
@@ -25,6 +24,13 @@
         "url": "https://github.com/mamangzed/tablein.git"
     },
     "devDependencies": {
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/commit-analyzer": "^13.0.1",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^11.0.2",
+        "@semantic-release/npm": "^12.0.1",
+        "@semantic-release/release-notes-generator": "^14.0.3",
+        "semantic-release": "^24.2.4",
         "terser": "^5.27.0"
     }
 }
