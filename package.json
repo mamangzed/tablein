@@ -1,0 +1,27 @@
+{
+    "name": "tablein",
+    "version": "0.0.1",
+    "description": "Table generator library",
+    "main": "dist/tablein.min.js",
+    "files": [
+        "dist/tablein.min.js"
+    ],
+    "scripts": {
+        "build": "node build.js",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "table",
+        "datatable",
+        "tablein"
+    ],
+    "author": "Wanda Hadis Suara",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mamangzed/tablein.git"
+    },
+    "devDependencies": {
+        "terser": "^5.27.0"
+    }
+}
