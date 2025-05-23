@@ -1,4 +1,4 @@
-# Tabelin
+# Tablein
 
 A powerful, feature-rich JavaScript table library for creating interactive, customizable tables with advanced functionality.
 
@@ -54,7 +54,7 @@ Include the library in your HTML:
 <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/html2pdf.js/dist/html2pdf.bundle.min.js"></script>
 
-<!-- Tabelin library -->
+<!-- Tablein library -->
 <script src="https://unpkg.com/tablein/dist/tablein.min.js"></script>
 <!-- or -->
  <script src="https://cdn.jsdelivr.net/npm/tablein/dist/tablein.min.js"></script>
@@ -63,13 +63,13 @@ Include the library in your HTML:
 ### Using npm
 
 ```bash
-npm install tabelin
+npm install Tablein
 ```
 
 Then import it in your JavaScript file:
 
 ```javascript
-import Tabelin from 'tabelin';
+import Tablein from 'Tablein';
 ```
 
 ## Quick Start
@@ -86,7 +86,7 @@ Create a basic table with minimal configuration:
     { id: 3, name: "Bob Johnson", email: "bob@example.com" }
   ];
 
-  const table = new Tabelin({
+  const table = new Tablein({
     container: '#my-table',
     columns: [
       { field: 'id', title: 'ID' },
@@ -105,7 +105,7 @@ Create a basic table with minimal configuration:
 ### Creating a Table from JSON Data
 
 ```javascript
-const table = new Tabelin({
+const table = new Tablein({
   container: '#table-container',
   columns: [
     { field: 'id', title: 'ID' },
@@ -124,7 +124,7 @@ const table = new Tabelin({
 ### Creating a Table from an Existing HTML Table
 
 ```javascript
-const table = Tabelin.fromHTML('#existing-table', {
+const table = Tablein.fromHTML('#existing-table', {
   freezeHeader: true,
   sortable: true,
   searchable: true,
@@ -143,7 +143,7 @@ const table = Tabelin.fromHTML('#existing-table', {
 Handle large datasets by processing data on the server:
 
 ```javascript
-const serverTable = Tabelin.createServerTable(
+const serverTable = Tablein.createServerTable(
   '#server-table-container',
   [
     { field: 'id', title: 'ID', sortable: true },
@@ -171,7 +171,7 @@ const serverTable = Tabelin.createServerTable(
 Efficiently handle large datasets with lazy loading:
 
 ```javascript
-const infiniteTable = Tabelin.createInfiniteTable(
+const infiniteTable = Tablein.createInfiniteTable(
   '#infinite-table-container',
   [
     { field: 'id', title: 'ID' },
@@ -192,7 +192,7 @@ const infiniteTable = Tabelin.createInfiniteTable(
 Visualize your data right in the table:
 
 ```javascript
-const visualizationTable = new Tabelin({
+const visualizationTable = new Tablein({
   container: '#visualizations-table-container',
   columns: [
     { field: 'id', title: 'ID' },
@@ -214,7 +214,7 @@ const visualizationTable = new Tabelin({
 Enable real-time collaborative editing:
 
 ```javascript
-const editableTable = new Tabelin({
+const editableTable = new Tablein({
   container: '#editable-table',
   columns: [
     { field: 'id', title: 'ID' },
@@ -239,7 +239,7 @@ const editableTable = new Tabelin({
 Apply custom styling to your table:
 
 ```javascript
-const styledTable = new Tabelin({
+const styledTable = new Tablein({
   container: '#custom-table-container',
   columns: [
     { field: 'id', title: 'ID' },
@@ -268,7 +268,7 @@ const styledTable = new Tabelin({
 Add a customizable right-click menu:
 
 ```javascript
-const contextMenuTable = new Tabelin({
+const contextMenuTable = new Tablein({
   container: '#context-menu-table',
   columns: [
     { field: 'id', title: 'ID' },
@@ -301,7 +301,7 @@ const contextMenuTable = new Tabelin({
 Automatically analyze data patterns:
 
 ```javascript
-const insightsTable = new Tabelin({
+const insightsTable = new Tablein({
   container: '#insights-table-container',
   columns: [
     { field: 'id', title: 'ID' },
@@ -327,7 +327,7 @@ const insightsTable = new Tabelin({
 Apply and validate business rules:
 
 ```javascript
-const validationTable = new Tabelin({
+const validationTable = new Tablein({
   container: '#validation-table-container',
   columns: [
     { field: 'id', title: 'ID' },
@@ -373,7 +373,7 @@ const validationTable = new Tabelin({
 Apply styling based on cell values:
 
 ```javascript
-const formattingTable = new Tabelin({
+const formattingTable = new Tablein({
   container: '#formatting-table-container',
   columns: [
     { field: 'id', title: 'ID' },
@@ -467,7 +467,7 @@ const formattingTable = new Tabelin({
 
 ## Events
 
-Tabelin supports several events you can subscribe to using the `on` method:
+Tablein supports several events you can subscribe to using the `on` method:
 
 ```javascript
 table.on('rowClick', function(rowData, rowIndex) {
@@ -501,7 +501,7 @@ table.on('error', function(error) {
 
 ## API Methods
 
-Here are the main methods you can call on a Tabelin instance:
+Here are the main methods you can call on a Tablein instance:
 
 | Method | Description |
 |--------|-------------|

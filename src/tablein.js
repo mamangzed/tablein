@@ -1,5 +1,5 @@
 /**
- * Tabelin - A comprehensive table library
+ * Tablein - A comprehensive table library
  * Features:
  * - Initialize from existing HTML table or JSON data
  * - Freeze headers and rows
@@ -12,7 +12,7 @@
  * - AI-Powered Data Insights
  */
 
-class Tabelin {
+class Tablein {
   constructor(options = {}) {
     this.options = {
       // Default options
@@ -1489,7 +1489,7 @@ class Tabelin {
    * Quick static method to create a table from an existing HTML table
    */
   static fromHTML(selector, options = {}) {
-    return new Tabelin({
+    return new Tablein({
       ...options,
       container: selector,
       useHTML: selector
@@ -1500,7 +1500,7 @@ class Tabelin {
    * Quick static method to create a table with infinite scroll
    */
   static createInfiniteTable(selector, columns, data, options = {}) {
-    return new Tabelin({
+    return new Tablein({
       container: selector,
       columns,
       data,
@@ -1514,7 +1514,7 @@ class Tabelin {
    * Quick method to create a server-side table
    */
   static createServerTable(selector, columns, serverUrl, options = {}) {
-    return new Tabelin({
+    return new Tablein({
       container: selector,
       columns,
       serverSide: true,
@@ -4233,7 +4233,7 @@ if (typeof document !== 'undefined') {
 
 // Export the library
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = Tabelin;
+  module.exports = Tablein;
 } else if (typeof window !== 'undefined') {
-  window.Tabelin = Tabelin;
+  window.Tablein = Tablein;
 }
