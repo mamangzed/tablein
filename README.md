@@ -2,8 +2,6 @@
 
 A powerful, feature-rich JavaScript table library for creating interactive, customizable tables with advanced functionality.
 
-![Tabelin Demo](https://via.placeholder.com/800x400?text=Tabelin+Table+Library)
-
 ## Features
 
 - **Client & Server-Side Operations**: Support for both client-side and server-side data processing
@@ -530,7 +528,3 @@ Here are the main methods you can call on a Tabelin instance:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Demo
-
-Check out our [live demo](https://example.com/tabelin-demo) to see Tabelin in action.

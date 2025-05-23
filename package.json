@@ -1,5 +1,8 @@
 {
     "name": "tablein",
+    "publishConfig": {
+        "access": "public"
+    },
     "version": "0.0.1",
     "description": "Table generator library",
     "main": "dist/tablein.min.js",
