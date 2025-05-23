@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/mamangzed/tablein/compare/v1.0.0...v1.1.0) (2025-05-23)
+
+
+### Features
+
+* release of tablein library ([b0299b3](https://github.com/mamangzed/tablein/commit/b0299b3e2be1013baa6217a5425134ed6af9acd7))
+
 # 1.0.0 (2025-05-23)
 
 
