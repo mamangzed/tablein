@@ -10,12 +10,26 @@
         "dist/tablein.min.js"
     ],
     "scripts": {
+        "build": "terser src/tablein.js -c -m -o dist/tablein.min.js",
         "semantic-release": "semantic-release"
     },
     "keywords": [
         "table",
         "datatable",
-        "tablein"
+        "tablein",
+        "grid",
+        "data-grid",
+        "javascript-table",
+        "sortable-table",
+        "pagination",
+        "data-visualization",
+        "searchable",
+        "exportable",
+        "excel-export",
+        "pdf-export",
+        "frozen-columns",
+        "table-widget",
+        "interactive-table"
     ],
     "author": "Wanda Hadis Suara",
     "license": "MIT",
